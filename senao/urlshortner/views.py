@@ -20,13 +20,19 @@ def redirect_origin(request, hash):
     try:
         
         if not check_rate_limit(hash):
-            return JsonResponse({'error': 'ratelimited'}, status=429)
+            return JsonResponse({
+                "success": False,
+                "reason": "ratelimited",
+            }, status=429)
 
         r = get_redis_connection("default")
         origin_url = r.get(hash)
         
         if not origin_url:
-            return HttpResponseNotFound("error hash not found")
+            return JsonResponse({
+                "success": False,
+                "reason": "short url invalid",
+            }, status=404)
         
         return redirect(origin_url.decode("utf-8"))
 
@@ -93,6 +99,10 @@ def get_urldata(request, hash):
         url = UrlData.objects.get(hash=hash)
         serializer = UrlDataSerializer(url)
         return Response(serializer.data)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 7767e51 (url shortner with ratelimit)
     except UrlData.DoesNotExist:
         return HttpResponseNotFound("error hash not found")
