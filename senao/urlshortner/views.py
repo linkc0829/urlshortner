@@ -99,10 +99,6 @@ def get_urldata(request, hash):
         url = UrlData.objects.get(hash=hash)
         serializer = UrlDataSerializer(url)
         return Response(serializer.data)
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 7767e51 (url shortner with ratelimit)
     except UrlData.DoesNotExist:
         return HttpResponseNotFound("error hash not found")
